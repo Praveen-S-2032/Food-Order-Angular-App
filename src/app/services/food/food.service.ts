@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Foods } from 'src/app/shared/models/food';
+import { Tag } from 'src/app/shared/models/tag';
 @Injectable({
   providedIn: 'root',
 })
 export class FoodService {
   constructor() {}
 
-  getAll():Foods[]{
+  getAll(): Foods[] {
     return [
       {
         id: 1,
@@ -14,7 +15,7 @@ export class FoodService {
         name: 'Chocolet Cake',
         favorite: false,
         star: 4,
-        tags: ['tag1', 'tag2'],
+        tags: ['Cake'],
         imageUrl: '/assets/food-1.jpg',
         cookTime: '30 min',
         origins: ['Italy', 'France'],
@@ -25,7 +26,7 @@ export class FoodService {
         name: 'Momos',
         favorite: true,
         star: 5,
-        tags: ['tag3', 'tag4'],
+        tags: ['FastFood'],
         imageUrl: '/assets/food-2.jpg',
         cookTime: '40 min',
         origins: ['Mexico'],
@@ -36,7 +37,7 @@ export class FoodService {
         name: 'KFC',
         favorite: true,
         star: 3.8,
-        tags: ['tag5', 'tag6'],
+        tags: ['NonVeg'],
         imageUrl: '/assets/food-3.jpg',
         cookTime: '20 min',
         origins: ['Japan'],
@@ -47,7 +48,7 @@ export class FoodService {
         name: 'Fish Fry',
         favorite: false,
         star: 4,
-        tags: ['tag7', 'tag8'],
+        tags: ['NonVeg'],
         imageUrl: '/assets/food-4.jpg',
         cookTime: '50 min',
         origins: ['India'],
@@ -58,7 +59,7 @@ export class FoodService {
         name: 'French fries',
         favorite: false,
         star: 5,
-        tags: ['tag11', 'tag12'],
+        tags: ['Fries', 'FastFood'],
         imageUrl: '/assets/food-6.jpg',
         cookTime: '35 min',
         origins: ['USA'],
@@ -69,7 +70,7 @@ export class FoodService {
         name: 'Mix cake',
         favorite: true,
         star: 3,
-        tags: ['tag13', 'tag14'],
+        tags: ['Cake'],
         imageUrl: '/assets/food-7.jpg',
         cookTime: '15 min',
         origins: ['Thailand'],
@@ -80,7 +81,7 @@ export class FoodService {
         name: 'Panner',
         favorite: false,
         star: 4,
-        tags: ['tag15', 'tag16'],
+        tags: ['Panner'],
         imageUrl: '/assets/food-8.jpg',
         cookTime: '30 min',
         origins: ['Vietnam'],
@@ -91,7 +92,7 @@ export class FoodService {
         name: 'Orange',
         favorite: true,
         star: 5,
-        tags: ['tag17', 'tag18'],
+        tags: ['Fruits'],
         imageUrl: '/assets/food-9.jpg',
         cookTime: '20 min',
         origins: ['Korea'],
@@ -102,7 +103,7 @@ export class FoodService {
         name: 'Sandwich',
         favorite: false,
         star: 3,
-        tags: ['tag19', 'tag20'],
+        tags: ['Sandwich', 'FastFood'],
         imageUrl: '/assets/food-10.jpg',
         cookTime: '40 min',
         origins: ['Spain'],
@@ -113,7 +114,7 @@ export class FoodService {
         name: 'Panner Fry',
         favorite: true,
         star: 4,
-        tags: ['tag21', 'tag22'],
+        tags: ['Panner', 'Fry'],
         imageUrl: '/assets/food-11.jpg',
         cookTime: '25 min',
         origins: ['Brazil'],
@@ -124,7 +125,7 @@ export class FoodService {
         name: 'Donuts',
         favorite: false,
         star: 4,
-        tags: ['tag23', 'tag24'],
+        tags: ['Donuts'],
         imageUrl: '/assets/food-12.jpg',
         cookTime: '30 min',
         origins: ['Germany'],
@@ -135,11 +136,33 @@ export class FoodService {
         name: 'Pasta',
         favorite: false,
         star: 4,
-        tags: ['tag27', 'tag28'],
+        tags: ['Pasta'],
         imageUrl: '/assets/food-14.jpg',
         cookTime: '45 min',
         origins: ['Greece'],
       },
     ];
+  }
+
+  getAllTag(): Tag[] {
+    let obj: { name: string; count: number }[] = [{name:'All',count:0}];
+    this.getAll().forEach((food) => {
+      food.tags.forEach((tag) => {
+        let existingTag = obj.find((t) => t.name === tag);
+
+        if (existingTag) {
+          existingTag.count++;
+        } else {
+          obj.push({ name: tag, count: 1 });
+        }
+      });
+    });
+    obj[0].count = this.getAll().length;
+    return obj;
+  }
+
+  getAllFoodsByTag(tag: string): Foods[] {
+    if (tag.toLowerCase() == 'all') return this.getAll();
+    else return this.getAll().filter((food) => food.tags?.includes(tag));
   }
 }
