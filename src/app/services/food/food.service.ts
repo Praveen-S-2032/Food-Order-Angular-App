@@ -144,6 +144,10 @@ export class FoodService {
     ];
   }
 
+  getFoodById(id:number):Foods{
+    return this.getAll().find(food =>food.id ==id)!;
+  }
+  
   getAllTag(): Tag[] {
     let obj: { name: string; count: number }[] = [{name:'All',count:0}];
     this.getAll().forEach((food) => {
